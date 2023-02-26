@@ -7,15 +7,19 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 16,
     backgroundColor: '#ffffff',
   },
-  imageContainer: {
+  camera: {
     justifyContent: 'center',
     alignItems: 'center',
+    height: 240,
+    marginBottom: 8,
+    borderRadius: 8,
+    overflow: 'hidden',
   },
   image: {
-    width: '100%',
-    height: 220,
+    // width: '100%',
+    width: 200,
+    height: 120,
     borderRadius: 8,
-    marginBottom: 8,
   },
   addPhotoButton: {
     position: 'absolute',
@@ -51,7 +55,6 @@ export const styles = StyleSheet.create({
     borderBottomColor: '#E8E8E8',
   },
   button: {
-    backgroundColor: '#F6F6F6',
     paddingVertical: 16,
     borderRadius: 100,
   },
@@ -59,7 +62,6 @@ export const styles = StyleSheet.create({
     fontFamily: 'Roboto-Regular',
     fontSize: 16,
     lineHeight: 19,
-    color: '#BDBDBD',
     textAlign: 'center',
   },
 });
