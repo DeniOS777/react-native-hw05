@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Text,
   View,
@@ -11,21 +11,32 @@ import {
   Platform,
 } from 'react-native';
 import { Camera, CameraType } from 'expo-camera';
+import * as Location from 'expo-location';
 import { MaterialIcons } from '@expo/vector-icons';
 
 import { styles } from './CreatePostsScreen.styled';
 
 export const CreatePostsScreen = ({ navigation }) => {
-  const [permission, requestPermission] = Camera.useCameraPermissions();
-  const [cameraRef, setCameraRef] = useState(null);
+  // const [permission, requestPermission] = Camera.useCameraPermissions();
   const [type, setType] = useState(CameraType.back);
+  const [cameraRef, setCameraRef] = useState(null);
   const [photo, setPhoto] = useState('');
   const [title, setTitle] = useState('');
+  const [locationTitle, setLocationTitle] = useState('');
   const [location, setLocation] = useState('');
   const [isFocus, setIsFocus] = useState(true);
 
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        return;
+      }
+    })();
+  }, []);
+
   const handleTitle = text => setTitle(text);
-  const handleLocation = text => setLocation(text);
+  const handleLocationTitle = text => setLocationTitle(text);
   const handleFocus = () => setIsFocus(false);
 
   const makePhoto = async () => {
@@ -34,16 +45,17 @@ export const CreatePostsScreen = ({ navigation }) => {
   };
 
   const isPostReady = () => {
-    if (!photo || !title || !location) return false;
+    if (!photo || !title || !locationTitle) return false;
     return true;
   };
 
-  const sendPost = () => {
-    if (!isPostReady()) {
-      return console.log('Fill in all the fields');
-    }
-    navigation.navigate('Posts', { photo, title, location });
+  const sendPost = async () => {
+    if (!isPostReady()) return;
+    let { coords } = await Location.getCurrentPositionAsync({});
+    setLocation(coords);
+    navigation.navigate('Posts', { photo, title, locationTitle, location });
     setTitle('');
+    setLocationTitle('');
     setLocation('');
     setPhoto('');
   };
@@ -77,8 +89,8 @@ export const CreatePostsScreen = ({ navigation }) => {
               style={styles.inputTitle}
             />
             <TextInput
-              onChangeText={handleLocation}
-              value={location}
+              onChangeText={handleLocationTitle}
+              value={locationTitle}
               placeholder="Местность..."
               placeholderTextColor="#BDBDBD"
               style={styles.inputLocation}
