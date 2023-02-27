@@ -6,6 +6,10 @@ import {
   TextInput,
   TouchableOpacity,
   FlatList,
+  TouchableWithoutFeedback,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { styles } from './CommentsScreen.styled';
@@ -44,8 +48,9 @@ const Item = ({ item }) => (
   </View>
 );
 
-export const CommentsScreen = () => {
+export const CommentsScreen = ({ route }) => {
   const [comments, setComments] = useState('');
+  const { photo } = route.params;
 
   const handleInput = text => setComments(text);
 
@@ -56,41 +61,45 @@ export const CommentsScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.imageContainer}>
-        <Image
-          source={{ uri: 'https://via.placeholder.com/343x240' }}
-          style={styles.image}
-        />
-      </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{ flex: 1 }}
+      >
+        <View style={styles.container}>
+          <View style={styles.imageContainer}>
+            <Image source={{ uri: photo }} style={styles.image} />
+          </View>
 
-      <View style={{ height: 210 }}>
-        <FlatList
-          data={list}
-          renderItem={({ item }) => <Item item={item} />}
-          keyExtractor={item => item.id}
-        />
-      </View>
+          <View style={{ height: 210 }}>
+            <FlatList
+              data={list}
+              renderItem={({ item }) => <Item item={item} />}
+              keyExtractor={item => item.id}
+            />
+          </View>
 
-      <View style={styles.inputWrap}>
-        <TextInput
-          onFocus={null}
-          onBlur={null}
-          onChangeText={handleInput}
-          value={comments}
-          keyboardType="default"
-          placeholderTextColor="#BDBDBD"
-          placeholder="Комментировать..."
-          style={styles.input}
-        />
-        <TouchableOpacity
-          onPress={handleComments}
-          activeOpacity={0.8}
-          style={styles.btnSendComments}
-        >
-          <Feather name="arrow-up" size={24} color="#ffffff" />
-        </TouchableOpacity>
-      </View>
-    </View>
+          <View style={styles.inputWrap}>
+            <TextInput
+              onFocus={null}
+              onBlur={null}
+              onChangeText={handleInput}
+              value={comments}
+              keyboardType="default"
+              placeholderTextColor="#BDBDBD"
+              placeholder="Комментировать..."
+              style={styles.input}
+            />
+            <TouchableOpacity
+              onPress={handleComments}
+              activeOpacity={0.8}
+              style={styles.btnSendComments}
+            >
+              <Feather name="arrow-up" size={24} color="#ffffff" />
+            </TouchableOpacity>
+          </View>
+        </View>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 };

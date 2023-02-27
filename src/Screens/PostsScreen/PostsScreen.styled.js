@@ -62,7 +62,7 @@ export const styles = StyleSheet.create({
     lineHeight: 19,
     color: '#BDBDBD',
   },
-  textLocation: {
+  textPlace: {
     marginLeft: 6,
     fontFamily: 'Roboto-Regular',
     fontSize: 16,

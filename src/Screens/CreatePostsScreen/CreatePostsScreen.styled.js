@@ -31,7 +31,7 @@ export const styles = StyleSheet.create({
     borderRadius: 50,
   },
   downloadTitle: {
-    marginBottom: 26,
+    marginBottom: 22,
     fontFamily: 'Roboto-Regular',
     fontSize: 16,
     lineHeight: 19,
@@ -48,7 +48,7 @@ export const styles = StyleSheet.create({
   inputLocation: {
     height: 50,
     marginTop: 16,
-    marginBottom: 28,
+    marginBottom: 20,
     fontSize: 16,
     lineHeight: 19,
     borderBottomWidth: 1,

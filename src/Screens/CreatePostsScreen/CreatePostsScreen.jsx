@@ -22,21 +22,11 @@ export const CreatePostsScreen = ({ navigation }) => {
   const [cameraRef, setCameraRef] = useState(null);
   const [photo, setPhoto] = useState('');
   const [title, setTitle] = useState('');
-  const [locationTitle, setLocationTitle] = useState('');
-  const [location, setLocation] = useState('');
+  const [place, setPlace] = useState('');
   const [isFocus, setIsFocus] = useState(true);
 
-  useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        return;
-      }
-    })();
-  }, []);
-
   const handleTitle = text => setTitle(text);
-  const handleLocationTitle = text => setLocationTitle(text);
+  const handlePlace = text => setPlace(text);
   const handleFocus = () => setIsFocus(false);
 
   const makePhoto = async () => {
@@ -45,19 +35,22 @@ export const CreatePostsScreen = ({ navigation }) => {
   };
 
   const isPostReady = () => {
-    if (!photo || !title || !locationTitle) return false;
+    if (!photo || !title || !place) return false;
     return true;
   };
 
   const sendPost = async () => {
     if (!isPostReady()) return;
-    let { coords } = await Location.getCurrentPositionAsync({});
-    setLocation(coords);
-    navigation.navigate('Posts', { photo, title, locationTitle, location });
-    setTitle('');
-    setLocationTitle('');
-    setLocation('');
+    const response = await Location.getCurrentPositionAsync({});
+    const location = {
+      longitude: response.coords.longitude,
+      latitude: response.coords.latitude,
+    };
+    console.log('Location', location);
+    navigation.navigate('Posts', { photo, title, place, location });
     setPhoto('');
+    setTitle('');
+    setPlace('');
   };
 
   return (
@@ -89,8 +82,8 @@ export const CreatePostsScreen = ({ navigation }) => {
               style={styles.inputTitle}
             />
             <TextInput
-              onChangeText={handleLocationTitle}
-              value={locationTitle}
+              onChangeText={handlePlace}
+              value={place}
               placeholder="Местность..."
               placeholderTextColor="#BDBDBD"
               style={styles.inputLocation}
