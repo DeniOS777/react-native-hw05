@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Text,
   View,
@@ -17,7 +17,6 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { styles } from './CreatePostsScreen.styled';
 
 export const CreatePostsScreen = ({ navigation }) => {
-  // const [permission, requestPermission] = Camera.useCameraPermissions();
   const [type, setType] = useState(CameraType.back);
   const [cameraRef, setCameraRef] = useState(null);
   const [photo, setPhoto] = useState('');
@@ -46,7 +45,6 @@ export const CreatePostsScreen = ({ navigation }) => {
       longitude: response.coords.longitude,
       latitude: response.coords.latitude,
     };
-    console.log('Location', location);
     navigation.navigate('Posts', { photo, title, place, location });
     setPhoto('');
     setTitle('');

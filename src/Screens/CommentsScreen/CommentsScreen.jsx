@@ -56,7 +56,6 @@ export const CommentsScreen = ({ route }) => {
 
   const handleComments = () => {
     if (!comments) return;
-    console.log(comments);
     setComments('');
   };
 
